@@ -1,0 +1,1 @@
+## TODO Check user inputed cords to see if they are in the hull. Look into building multiple hulls based on observations to give a likeliness score
