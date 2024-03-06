@@ -32,38 +32,6 @@ class RangePlotterApp(QWidget):
         layout.addWidget(self.map_params_box, 1, 0)
         layout.addWidget(self.plot_box, 1, 1)
 
-    # def main():
-
-    #     app = QApplication(sys.argv)
-
-
-    #     window = QWidget()
-    #     window.setWindowTitle('Range Plotter')
-
-    #     species_box = build_species_inputs_box()
-    #     map_params_box = build_map_paramaters_box()
-    #     plot_box = build_plot_groupbox()
-
-
-    #     layout = QGridLayout()
-    #     layout.addWidget(species_box,0,0)
-    #     layout.addWidget(map_params_box,1,0)
-    #     layout.addWidget(plot_box,1,1)
-
-
-    #     window.setLayout(layout)
-
-    #     # window.setGeometry(500,500,500,500)
-
-    #     window.show() 
-    #     app.exec()
-
-
-
-
-
-
-
 
     def build_species_inputs_box(self):
 
@@ -102,7 +70,7 @@ class RangePlotterApp(QWidget):
         for text, data in licenses:
             checkbox = QCheckBox(text)
             checkbox.setProperty("licenseData", data)  # Custom property to hold the license data
-            layout.addWidget(checkbox, row, 0, 1, 2)  # Adjust grid positioning as needed
+            layout.addWidget(checkbox, row, 0, 1, 2)  
             checkboxes.append(checkbox)
             row += 1
 
@@ -114,7 +82,6 @@ class RangePlotterApp(QWidget):
                 genus_input.text(), 
                 species_input.text(),
                 checkboxes
-                # license_combo_box.currentData()
             )
         )
 
@@ -124,7 +91,6 @@ class RangePlotterApp(QWidget):
         layout.addWidget(genus_input,0,1,1,1)
         layout.addWidget(species_label,1,0,1,1)
         layout.addWidget(species_input,1,1,1,1)
-        # layout.addWidget(license_combo_box,2,0,3,2)
         layout.addWidget(download_data_button,6,0,1,2)
 
 
@@ -138,31 +104,42 @@ class RangePlotterApp(QWidget):
         max_lat_label = QLabel()
         max_lat_label.setText("Max Latitude: ")
 
-        max_lat_entry = QLineEdit()
+        self.max_lat_entry = QLineEdit()
+        self.max_lat_entry.setText("67")
         
 
         min_lat_label = QLabel()
         min_lat_label.setText("Min Latitude: ")
 
-        min_lat_entry = QLineEdit()
+        self.min_lat_entry = QLineEdit()
+        self.min_lat_entry.setText("15")
         
 
         max_long_label = QLabel()
         max_long_label.setText("Max Longitude: ")
 
-        max_long_entry = QLineEdit()
-        
+        self.max_long_entry = QLineEdit()
+        self.max_long_entry.setText("-25")
 
         min_long_label = QLabel()
         min_long_label.setText("Min Longitude: ")
 
-        min_long_entry = QLineEdit()
+        self.min_long_entry = QLineEdit()
+        self.min_long_entry.setText("-165")
 
 
         smooth_fact_label = QLabel()
         smooth_fact_label.setText("Smooth Factor: ")
 
-        smooth_fact_entry = QLineEdit()
+        self.smooth_fact_entry = QLineEdit()
+        self.smooth_fact_entry.setText("0.1")
+
+        eps_label = QLabel()
+        eps_label.setText("Epsilon: ")
+
+        self.eps_entry = QLineEdit()
+        self.eps_entry.setText("4")
+        self.eps_entry.setToolTip("Epsion is the maximum distance between two samples for them to be considered as in the same neighborhood. Too small an epsilon value can lead to data points not being clustered at all (most points will be considered noise). Too large an epsilon can cause separate clusters to merge and not enough granularity in the clustering.")
 
 
         num_points_label = QLabel()
@@ -176,12 +153,43 @@ class RangePlotterApp(QWidget):
         self.species_combobox = QComboBox()
         self.populate_combobox_with_directories(self.species_combobox, "./data")
 
-
-
         points_checkbox_label = QLabel()
         points_checkbox_label.setText("Plot Observation Points: ")    
 
         self.points_checkbox = QCheckBox("", self)
+
+        outline_checkbox_label = QLabel()
+        outline_checkbox_label.setText("Plot Outline: ")    
+
+        self.outline_checkbox = QCheckBox("", self)
+
+
+        styling_header_label = QLabel()
+        styling_header_label.setText("Styling: ")
+
+        style_point_size_label = QLabel()
+        style_point_size_label.setText("Point Size: ")
+
+        self.style_point_size_entry = QLineEdit()
+        self.style_point_size_entry.setText("1")
+
+
+        style_point_color_label = QLabel()
+        style_point_color_label.setText("Point Size: ")
+
+        self.style_point_color_entry = QLineEdit()
+        self.style_point_color_entry.setText("#0B6A00")
+
+        fill_range_checkbox_label = QLabel()
+        fill_range_checkbox_label.setText("Fill Range: ")    
+
+        self.fill_range_checkbox = QCheckBox("", self)
+
+        range_outline_size_label = QLabel()
+        range_outline_size_label.setText("Range Outline Size: ")
+
+        self.range_outline_size_entry = QLineEdit()
+        self.range_outline_size_entry.setText("1")
 
 
 
@@ -200,16 +208,33 @@ class RangePlotterApp(QWidget):
         layout.addWidget(min_lat_label,2,0)
         layout.addWidget(max_long_label,3,0)
         layout.addWidget(min_long_label,4,0)
-        layout.addWidget(max_lat_entry,1,1)
-        layout.addWidget(min_lat_entry,2,1)
-        layout.addWidget(max_long_entry,3,1)
-        layout.addWidget(min_long_entry,4,1)
+        layout.addWidget(self.max_lat_entry,1,1)
+        layout.addWidget(self.min_lat_entry,2,1)
+        layout.addWidget(self.max_long_entry,3,1)
+        layout.addWidget(self.min_long_entry,4,1)
         layout.addWidget(smooth_fact_label,5,0)
-        layout.addWidget(smooth_fact_entry,5,1)
-        layout.addWidget(num_points_label,6,0)
-        layout.addWidget(num_points_entry,6,1)
-        layout.addWidget(points_checkbox_label,7,0)
-        layout.addWidget(self.points_checkbox,7,1)
+        layout.addWidget(self.smooth_fact_entry,5,1)
+        layout.addWidget(eps_label,6,0)
+        layout.addWidget(self.eps_entry,6,1)
+        layout.addWidget(num_points_label,7,0)
+        layout.addWidget(num_points_entry,7,1)
+        layout.addWidget(points_checkbox_label,8,0)
+        layout.addWidget(self.points_checkbox,8,1)
+        layout.addWidget(outline_checkbox_label,9,0)
+        layout.addWidget(self.outline_checkbox,9,1)
+        layout.addWidget(styling_header_label,10,0,2,2)
+        layout.addWidget(style_point_size_label,12,0)
+        layout.addWidget(self.style_point_size_entry,12,1)
+        layout.addWidget(style_point_color_label,13,0)
+        layout.addWidget(self.style_point_color_entry,13,1)
+
+        layout.addWidget(fill_range_checkbox_label,14,0)
+        layout.addWidget(self.fill_range_checkbox,14,1)
+        layout.addWidget(range_outline_size_label,15,0)
+        layout.addWidget(self.range_outline_size_entry,15,1)
+
+
+
 
         map_paramaters_box.setLayout(layout)
 
@@ -258,6 +283,9 @@ class RangePlotterApp(QWidget):
 
     def update_plot(self,fig):
 
+        # TODO add check that long and lat entries are set
+        # TODO strip long and lat entries
+
         self.fig.clf()
 
         ax = self.fig.add_subplot(1, 1, 1, projection=ccrs.PlateCarree())
@@ -265,9 +293,18 @@ class RangePlotterApp(QWidget):
 
         self.plotting_service.plot_data(
             self.points_checkbox.isChecked(),
+            self.outline_checkbox.isChecked(),
             os.path.join('data',self.species_combobox.currentText(),self.species_combobox.currentText()+".json"),
-            ax
+            ax,
+            float(self.eps_entry.text()),
+            float(self.smooth_fact_entry.text()),
+            float(self.style_point_size_entry.text()),
+            self.style_point_color_entry.text(),
+            self.fill_range_checkbox.isChecked(),
+            float(self.range_outline_size_entry.text()),
         )
+
+        ax.set_extent([self.min_long_entry.text(),self.max_long_entry.text(),self.min_lat_entry.text(),self.max_lat_entry.text()])
         
 
         self.canvas.draw()
