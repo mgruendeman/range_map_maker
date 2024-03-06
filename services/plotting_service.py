@@ -35,22 +35,24 @@ class PlottingService:
 
 
         if not ax:  # In case ax is None or not passed
-            fig, ax = plt.subplots(figsize=(10, 10), subplot_kw={'projection': ccrs.PlateCarree()})
+            fig, ax = plt.subplots(figsize=(15, 15), dpi =500, subplot_kw={'projection': ccrs.PlateCarree()})
         else:
             # Use the existing ax to clear and plot, no need to create a new fig, ax
             ax.clear()
 
         # fig, ax = plt.subplots(figsize=(10, 10), subplot_kw={'projection': ccrs.PlateCarree()})
-        ax.coastlines()
-        ax.add_feature(cfeature.BORDERS)
-        ax.add_feature(cfeature.LAKES, edgecolor='black')
-        ax.add_feature(cfeature.OCEAN, edgecolor='black')
+        ax.add_feature(cfeature.COASTLINE, linewidth=0.25)
+        ax.add_feature(cfeature.BORDERS, linewidth=0.25)
+        ax.add_feature(cfeature.STATES, edgecolor = 'gray', linewidth=0.125)
+        ax.add_feature(cfeature.LAKES, edgecolor='black',linewidth=0.25, zorder =100)
+        ax.add_feature(cfeature.OCEAN, edgecolor='black',linewidth=0.25, zorder = 100)
 
 
+        # TODO: Add this stuff to GUI
         if plot_points:
             # Extract longitudes and latitudes for plotting
             longitudes, latitudes = zip(*points)
-            ax.scatter(longitudes, latitudes, transform=ccrs.Geodetic(), s=5, color='red', marker='o', edgecolor='none')
+            ax.scatter(longitudes, latitudes, transform=ccrs.Geodetic(), s=2, color='red', marker='o', edgecolor='none')
 
 
     def get_points(self, data):

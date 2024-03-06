@@ -232,7 +232,8 @@ class RangePlotterApp(QWidget):
 
         plot_box = plot_box = QGroupBox()
 
-        self.fig = Figure(figsize=(10, 10), dpi=300)
+        self.fig = Figure(figsize=(15, 15), dpi=500)
+
         self.canvas = FigureCanvas(self.fig)
 
 
@@ -260,6 +261,7 @@ class RangePlotterApp(QWidget):
         self.fig.clf()
 
         ax = self.fig.add_subplot(1, 1, 1, projection=ccrs.PlateCarree())
+        
 
         self.plotting_service.plot_data(
             self.points_checkbox.isChecked(),
@@ -287,7 +289,7 @@ class RangePlotterApp(QWidget):
         thread.start()
 
 
-    def get_selected_licenses(checkboxes):
+    def get_selected_licenses(self, checkboxes):
         """Collects and returns a comma-separated string of selected licenses."""
         selected_licenses = [checkbox.property("licenseData") for checkbox in checkboxes if checkbox.isChecked()]
         return ','.join(selected_licenses)
