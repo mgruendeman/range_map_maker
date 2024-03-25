@@ -34,30 +34,6 @@ def convex_hull(points):
         current = next_point
     return np.array(hull)
 
-# def plot_cluster_hull(points, clusters, ax):
-#     unique_clusters = np.unique(clusters)
-#     for cluster in unique_clusters:
-#         if cluster == -1:  # -1 means noise in DBSCAN
-#             continue  # Optionally, skip plotting noise points
-#         cluster_points = points[clusters == cluster]
-#         hull_points = convex_hull(cluster_points).vertices
-#         ax.scatter(cluster_points[:, 0], cluster_points[:, 1], s=5, transform=ccrs.Geodetic())
-#         ax.plot(cluster_points[hull_points, 0], cluster_points[hull_points, 1], 'r-', transform=ccrs.Geodetic())
-# def plot_cluster_hull(points, clusters, ax):
-#     unique_clusters = np.unique(clusters)
-#     for cluster in unique_clusters:
-#         if cluster == -1:  # -1 means noise in DBSCAN
-#             continue  # Optionally, skip plotting noise points
-#         cluster_points = points[clusters == cluster]
-#         hull = convex_hull(cluster_points)  # This now directly returns the hull points
-#         hull = smooth_hull(hull)
-#         if len(hull) < 3:  # Check if the hull has at least 3 points to form a polygon
-#             continue  # Skip clusters with less than 3 points (cannot form a convex hull)
-#         ax.scatter(cluster_points[:, 0], cluster_points[:, 1], s=5, transform=ccrs.Geodetic())
-#         # Close the hull polygon by appending the first point at the end
-#         hull_polygon = np.append(hull, [hull[0]], axis=0)
-#         ax.plot(hull_polygon[:, 0], hull_polygon[:, 1], 'r-', transform=ccrs.Geodetic())
-#         ax.fill(hull_points[:, 0], hull_points[:, 1], 'r', alpha=0.5, transform=ccrs.Geodetic())
 
 def plot_cluster_hull(points, clusters, ax):
     unique_clusters = np.unique(clusters)
@@ -80,58 +56,6 @@ def plot_cluster_hull(points, clusters, ax):
         # ax.fill(x, y, 'r', alpha=0.5, transform=ccrs.Geodetic())  # Optionally, fill the smoothed hull
 
 
-
-        
-# def smooth_hull(hull_polygon, smooth_factor=3, num_points=100):
-#     # Extract the x and y coordinates of the hull_polygon
-#     x, y = hull_polygon.exterior.xy
-    
-#     # Close the loop for the spline interpolation
-#     x, y = np.append(x, x[0]), np.append(y, y[0])
-    
-#     # Fit spline to hull's boundary points
-#     tck, u = splprep([x, y], s=smooth_factor)
-    
-#     # Generate new interpolated points for the smoothed curve
-#     u_new = np.linspace(u.min(), u.max(), num_points)
-#     x_new, y_new = splev(u_new, tck, der=0)
-    
-#     # Create a new smoothed polygon
-#     smoothed_hull = Polygon(zip(x_new, y_new))
-    
-#     return smoothed_hull
-# def smooth_hull(hull_polygon, smooth_factor=.02, num_points=1000):
-#     # Extract the x and y coordinates of the hull_polygon
-#     x, y = hull_polygon.exterior.xy
-    
-#     # Remove duplicate points
-#     unique_points = np.unique(np.column_stack([x, y]), axis=0)
-#     x, y = unique_points[:, 0], unique_points[:, 1]
-    
-#     # Ensure there are enough points for spline fitting
-#     if len(x) < 4:
-#         print("Not enough unique points for spline fitting.")
-#         return hull_polygon  # Return the original polygon if not enough points
-    
-#     # Close the loop for the spline interpolation, if not already closed
-#     if x[0] != x[-1] or y[0] != y[-1]:
-#         x = np.append(x, x[0])
-#         y = np.append(y, y[0])
-    
-#     try:
-#         # Fit spline to hull's boundary points
-#         tck, u = splprep([x, y], s=smooth_factor)
-        
-#         # Generate new interpolated points for the smoothed curve
-#         u_new = np.linspace(u.min(), u.max(), num_points)
-#         x_new, y_new = splev(u_new, tck, der=0)
-        
-#         # Create a new smoothed polygon
-#         smoothed_hull = Polygon(zip(x_new, y_new))
-#         return smoothed_hull
-#     except ValueError as e:
-#         print(f"Error in spline fitting: {e}")
-#         return hull_polygon  # Return the original polygon in case of error
         
 def smooth_hull(hull_points, s=0.0, k=3, num_points=1000):
     """
